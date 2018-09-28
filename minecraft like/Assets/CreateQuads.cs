@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class CreateQuads : MonoBehaviour
 {
+    enum Cubeside { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK };
+    public enum BlockType { GRASS, DIRT, STONE};
 
     public Material cubeMaterial;
+    public BlockType bType;
 
-    enum Cubeside { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK };
+    Vector2[,] blockUVs = { 
+		/*GRASS TOP*/		{new Vector2( 0.125f, 0.375f ), new Vector2( 0.1875f, 0.375f),
+                                new Vector2( 0.125f, 0.4375f ),new Vector2( 0.1875f, 0.4375f )},
+		/*GRASS SIDE*/		{new Vector2( 0.1875f, 0.9375f ), new Vector2( 0.25f, 0.9375f),
+                                new Vector2( 0.1875f, 1.0f ),new Vector2( 0.25f, 1.0f )},
+		/*DIRT*/			{new Vector2( 0.125f, 0.9375f ), new Vector2( 0.1875f, 0.9375f),
+                                new Vector2( 0.125f, 1.0f ),new Vector2( 0.1875f, 1.0f )},
+		/*STONE*/			{new Vector2( 0, 0.875f ), new Vector2( 0.0625f, 0.875f),
+                                new Vector2( 0, 0.9375f ),new Vector2( 0.0625f, 0.9375f )}
+                        };
 
     void CreateQuad(Cubeside side)
     {
@@ -20,10 +32,32 @@ public class CreateQuads : MonoBehaviour
         int[] triangles = new int[6];
 
         //all possible UVs
-        Vector2 uv00 = new Vector2(0f, 0f);
-        Vector2 uv10 = new Vector2(1f, 0f);
-        Vector2 uv01 = new Vector2(0f, 1f);
-        Vector2 uv11 = new Vector2(1f, 1f);
+        Vector2 uv00;
+        Vector2 uv10;
+        Vector2 uv01;
+        Vector2 uv11;
+
+        if (bType == BlockType.GRASS && side == Cubeside.TOP)
+        {
+            uv00 = blockUVs[0, 0];
+            uv10 = blockUVs[0, 1];
+            uv01 = blockUVs[0, 2];  
+            uv11 = blockUVs[0, 3];
+        }
+        else if (bType == BlockType.GRASS && side == Cubeside.BOTTOM)
+        {
+            uv00 = blockUVs[(int)(BlockType.DIRT + 1), 0];
+            uv10 = blockUVs[(int)(BlockType.DIRT + 1), 1];
+            uv01 = blockUVs[(int)(BlockType.DIRT + 1), 2];
+            uv11 = blockUVs[(int)(BlockType.DIRT + 1), 3];
+        }
+        else
+        {
+            uv00 = blockUVs[(int)(bType + 1), 0];
+            uv10 = blockUVs[(int)(bType + 1), 1];   
+            uv01 = blockUVs[(int)(bType + 1), 2];
+            uv11 = blockUVs[(int)(bType + 1), 3];
+        }
 
         //all possible vertices 
         Vector3 p0 = new Vector3(-0.5f, -0.5f, 0.5f);
