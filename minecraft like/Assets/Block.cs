@@ -6,7 +6,7 @@ public class Block
 {
 
     enum Cubeside { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK };
-    public enum BlockType { GRASS, DIRT, STONE };
+    public enum BlockType { GRASS, DIRT, STONE, AIR };
 
     BlockType bType;
     public bool isSolid;
@@ -31,7 +31,10 @@ public class Block
         parent = p;
         position = pos;
         cubeMaterial = c;
-        isSolid = true;
+        if (bType == BlockType.AIR)
+            isSolid = false;
+        else
+            isSolid = true;
     }
 
     void CreateQuad(Cubeside side)
@@ -160,7 +163,8 @@ public class Block
 
     public void Draw()
     {
-
+        if (bType == BlockType.AIR)
+            return;
         if (!HasSolidNeighbour((int)position.x, (int)position.y, (int)position.z + 1))
             CreateQuad(Cubeside.FRONT);
         if (!HasSolidNeighbour((int)position.x, (int)position.y, (int)position.z - 1))
