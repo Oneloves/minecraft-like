@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Chunk
 {
-
     public Material cubeMaterial;
     public Block[,,] chunkData;
     public GameObject chunk;
@@ -60,9 +59,11 @@ public class Chunk
             for (int y = 0; y < World.chunkSize; y++)
                 for (int x = 0; x < World.chunkSize; x++)
                 {
-                    chunkData[x, y, z].Draw();
+                    chunkData[x, y, z].Draw();      
                 }
         CombineQuads();
+        MeshCollider collider = chunk.gameObject.AddComponent(typeof(MeshCollider)) as MeshCollider;
+        collider.sharedMesh = chunk.transform.GetComponent<MeshFilter>().mesh;      
     }
 
     // Use this for initialization
