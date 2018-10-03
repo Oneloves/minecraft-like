@@ -43,6 +43,15 @@ public class Block
             isSolid = true;
     }
 
+    public void SetType(BlockType b)
+    {
+        bType = b;
+        if (bType == BlockType.AIR)
+            isSolid = false;
+        else
+            isSolid = true;
+    }
+
     void CreateQuad(Cubeside side)
     {
         Mesh mesh = new Mesh();
